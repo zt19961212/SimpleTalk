@@ -17,3 +17,6 @@
 5.用户可以自定义头像<br>
 
 ### 效果图:
+![](https://github.com/zt19961212/SimpleTalk/blob/master/screenshot/Screenshot_20180121-100.png)
+![](https://github.com/zt19961212/SimpleTalk/blob/master/screenshot/Screenshot_20180121%20-111.png)
+![](https://github.com/zt19961212/SimpleTalk/blob/master/screenshot/Screenshot_20180121%20-112.png)
