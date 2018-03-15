@@ -107,14 +107,12 @@ public class BaseApplication extends Application{
         // 得到头像目录的缓存地址
         File dir = new File(getCacheDirFile(), "portrait");
         // 创建所有的对应的文件夹
-        //noinspection ResultOfMethodCallIgnored
         dir.mkdirs();
 
         // 删除旧的一些缓存为文件
         File[] files = dir.listFiles();
         if (files != null && files.length > 0) {
             for (File file : files) {
-                //noinspection ResultOfMethodCallIgnored
                 file.delete();
             }
         }
@@ -132,12 +130,10 @@ public class BaseApplication extends Application{
      */
     public static File getAudioTmpFile(boolean isTmp) {
         File dir = new File(getCacheDirFile(), "audio");
-        //noinspection ResultOfMethodCallIgnored
         dir.mkdirs();
         File[] files = dir.listFiles();
         if (files != null && files.length > 0) {
             for (File file : files) {
-                //noinspection ResultOfMethodCallIgnored
                 file.delete();
             }
         }

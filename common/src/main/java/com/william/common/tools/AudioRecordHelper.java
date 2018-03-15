@@ -108,35 +108,7 @@ public class AudioRecordHelper {
         }
         return null;
     }
-    /*
-    private MediaRecorder createNewMediaRecorder() {
-        MediaRecorder record = new MediaRecorder();
-        record.setAudioSource(MediaRecorder.AudioSource.MIC);
-        record.setAudioChannels(1);
-        // 先写输出
-        record.setOutputFormat(MediaRecorder.OutputFormat.AMR_WB);
-        record.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);
-        record.setAudioEncodingBitRate(96000);
-        record.setAudioSamplingRate(44100);
-        record.setOutputFile(tmpFile.getAbsolutePath());
 
-        // Start
-        try {
-            record.prepare();
-            record.start();
-        } catch (IOException | RuntimeException e) {
-            e.printStackTrace();
-            record.release();
-            return null;
-        }
-
-        // Stop
-        record.stop();
-        record.release();
-
-        return record;
-    }
-    */
 
     /**
      * 进行异步录制
@@ -165,7 +137,7 @@ public class AudioRecordHelper {
         File file;
         if ((audioRecorder = initAudioRecord()) == null
                 || (file = initTmpFile()) == null) {
-           BaseApplication.showToast("录音初始化失败!");
+            BaseApplication.showToast("录音初始化失败!");
             return null;
         }
 
@@ -180,11 +152,18 @@ public class AudioRecordHelper {
 
         final int shortBufferSize = minShortBufferSize;
         final RecordCallback callback = this.callback;
+        Lame lame;
+        try {
+            // 初始化Lame转码库相关参数，传入当前的输入采样率，通道，以及输出的mp3格式的采样率
+            lame = new Lame(audioRecorder.getSampleRate(),
+                    audioRecorder.getChannelCount(),
+                    audioRecorder.getSampleRate());
+        } catch (RuntimeException ex) {
+            ex.printStackTrace();
+            BaseApplication.showToast("录音初始化失败");
+            return null;
+        }
 
-        // 初始化Lame转码库相关参数，传入当前的输入采样率，通道，以及输出的mp3格式的采样率
-        Lame lame = new Lame(audioRecorder.getSampleRate(),
-                audioRecorder.getChannelCount(),
-                audioRecorder.getSampleRate());
         // 构建一个输出流，定向到文件流上面
         LameOutputStream lameOutputStream = new LameOutputStream(lame, outputStream, shortBufferSize);
         // 构建一个异步的编码器，这样可以避免阻塞当前线程读取用户的录音

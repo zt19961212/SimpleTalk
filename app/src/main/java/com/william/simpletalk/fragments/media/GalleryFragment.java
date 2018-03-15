@@ -5,11 +5,14 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.CoordinatorLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 
 import com.william.common.tools.UiTool;
@@ -22,6 +25,7 @@ import com.william.simpletalk.R;
  */
 public class GalleryFragment extends BottomSheetDialogFragment
         implements GalleryView.SelectedChangeListener {
+    private AppBarLayout mAppBar;
     private GalleryView mGallery;
     private OnSelectedListener mListener;
 
@@ -40,7 +44,18 @@ public class GalleryFragment extends BottomSheetDialogFragment
                              Bundle savedInstanceState) {
         // 获取我们的GalleryView
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
+        mAppBar = (AppBarLayout) root.findViewById(R.id.appbar);
         mGallery = (GalleryView) root.findViewById(R.id.galleryView);
+        //获取appBar高度
+        ViewTreeObserver viewTreeObserver = mAppBar.getViewTreeObserver();
+        viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                int height = mAppBar.getMeasuredHeight();
+                CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mGallery.getLayoutParams();
+                layoutParams.setMargins(0, 0, 0, height);//动态设置margin
+                return true;
+            }
+        });
         return root;
     }
 
